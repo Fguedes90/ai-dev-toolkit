@@ -28,7 +28,7 @@ class GenerateGuidelineCommand(Command):
             help="Generate a guideline from a file"
         )
     
-    def execute(self, file_path: str, *args, **kwargs):
+    def execute(self, file_path: str, *args, **kwargs) -> None:
         file_content = self._read_file(file_path)
         console.print("File content loaded.")
         guideline = self._generate_guideline(file_content)
@@ -36,14 +36,14 @@ class GenerateGuidelineCommand(Command):
         self._save_guideline(guideline, file_path)
         console.print("Guideline saved.")
 
-    def _read_file(self, file_path: str):
+    def _read_file(self, file_path: str) -> str:
         with open(file_path, 'r') as file:
             return file.read()
 
-    def _generate_guideline(self, file_content: str):
+    def _generate_guideline(self, file_content: str) -> str:
         result = self.agent.run_sync(system_prompt, file_content)
         return result.data.guideline
 
-    def _save_guideline(self, guideline: str, file_path: str):
+    def _save_guideline(self, guideline: str, file_path: str) -> None:
         with open(file_path+'.guideline.md', 'w') as file:
             file.write(guideline)

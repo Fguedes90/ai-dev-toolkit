@@ -21,13 +21,6 @@ Always provide the full command, including any necessary flags or arguments.
 This command should be a single line command.
 This command must run correctly on the system {get_operational_system()}.
 
-For tree commands:
-- Use 'tree' command if available
-- If not, use 'find' as alternative
-- Always return the command as a plain string without any formatting
-
-Example response format:
-For showing directory tree excluding .md files: "tree -I '*.md'"
 """
 
 class TerminalBuilderCommand(Command):
@@ -50,8 +43,12 @@ class TerminalBuilderCommand(Command):
                 
             command = result.data.command.strip('"\'')  # Remove any quotes
             
+            # Get token usage
+            cost = result._cost
+            token_info = f"\n[dim]Tokens used: {cost.total_tokens} (Request: {cost.request_tokens}, Response: {cost.response_tokens})[/]"
+            
             console.print(Panel(
-                f"[bold blue]Generated Command:[/]\n[green]{command}[/]",
+                f"[bold blue]Generated Command:[/]\n[green]{command}[/]{token_info}",
                 title="AI Command Builder",
                 border_style="blue"
             ))

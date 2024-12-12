@@ -9,6 +9,7 @@ class Command:
     def __init__(self, name: str, help: str):
         self.name = name
         self.help = help
+        self.agent = None
         
     def execute(self, *args, **kwargs):
         raise NotImplementedError("Command must implement execute method")
